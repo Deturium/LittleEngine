@@ -10,7 +10,8 @@
     "outFile": "LittleEngine.js"
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "example/**/*"
   ],
   "exclude": [
     "node_modules"
