@@ -5,5 +5,6 @@ export interface Component {
 }
 
 export interface SingletonComponent {
+  name: string
   [propName: string]: any
 }

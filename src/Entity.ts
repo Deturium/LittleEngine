@@ -1,8 +1,12 @@
 import {
   Component,
-} from 'ECS'
+  World,
+} from './ECS'
 
 export class Entity {
+  type: string
+
+  world: World
   componentMap: Map<string, Component>
   // resourceHandle?: any
 
@@ -10,8 +14,12 @@ export class Entity {
     this.componentMap = new Map()
   }
 
-  getComponent(key: string): Component {
-    return this.componentMap.get(key)
+  hasComponent(name: string): boolean {
+    return this.componentMap.has(name)
+  }
+
+  getComponent(name: string): Component {
+    return this.componentMap.get(name)
   }
 
   addComponent(...components: Component[]) {
@@ -20,7 +28,11 @@ export class Entity {
     }
   }
 
-  removeComponent(key: string) {
-    this.componentMap.delete(key)
+  removeComponent(name: string) {
+    this.componentMap.delete(name)
+  }
+
+  remove() {
+    this.world.removeEntity(this)
   }
 }

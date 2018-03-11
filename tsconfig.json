@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "amd",
     "target": "es6",
     "noImplicitAny": true,
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "pretty": true,
     "outDir": "./build",
-    "outFile": "LittleEngine.js"
+    "outFile": "./build/LittleEngine.js"
   },
   "include": [
     "src/**/*",

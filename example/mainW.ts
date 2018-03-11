@@ -8,105 +8,61 @@ import {
 
 
 // COMPONENTS
-class MoveC implements Component {
-  name: string
+class PositionC implements Component {
+  name = "Position"
 
   x: number
   y: number
+
+  constructor(x = 0, y = 0) {
+    this.x = x
+    this.y = y
+  }
+}
+
+class MoveC implements Component {
+  name = "Move"
+
   speedX: number
   speedY: number
-  ispin: boolean
+  isPin: boolean
 
-  constructor() {
-
-  }
-
-  move() {
-    if (!this.ispin)
-      return
-    this.x += this.speedX
-    this.y += this.speedY
-  }
-
-  pin() {
-    this.ispin = false
-  }
-
-  unpin() {
-    this.ispin = true
+  constructor(speedX = 0, speedY = 0) {
+    this.speedX = speedX
+    this.speedY = speedY
+    this.isPin = false
   }
 }
 
 class BoxCollisionC implements Component {
-  name: string
+  name = "BoxCollision"
 
   width: number
   height: number
 
-  constructor() {
-
-  }
-
-  testCollosion(withBox: BoxCollisionC): boolean {
-    // TODO:
-    return false
+  constructor(width: number, height: number) {
+    this.width = width
+    this.height = height
   }
 }
 
 
 // GLOBAL COMPONENTS
-class InputGC implements SingletonComponent {
+class InputSC implements SingletonComponent {
+  name = "Input"
+
   keys: Set<String>
   mouse: {
     x: number
     y: number
   }
-}
 
-
-
-
-// SYSTEMS
-class InputS extends System {
   constructor() {
-    super()
-    this.name = 'InputS'
-  }
 
-  update(entitySet: Set<Entity>) {
-    const inputGC = this.getSingletonComponent()
-  }
-}
-
-class MoveS extends System {
-  constructor() {
-    super()
-    this.name = 'MoveS'
-  }
-
-  update(entitySet: Set<Entity>) {
-    for (let e of entitySet) {
-      let c = e.getComponent('Move')
-      c && c.move()
-    }
-  }
-}
-
-class CollisionS extends System {
-  constructor() {
-    super()
-  }
-
-  update(entitySet: Set<Entity>) {
-    for (let e1 of entitySet) {
-      for (let e2 of entitySet) {
-        let c1 = e1.getComponent('collision') as BoxCollisionC
-        let c2 = e2.getComponent('collision') as BoxCollisionC
-
-        if (c1.testCollosion(c2)) {
-          this.removeEntity(e1)
-        }
-      }
+    this.keys = new Set()
+    this.mouse = {
+      x: 0,
+      y: 0
     }
   }
 }
@@ -118,7 +74,7 @@ class PlayerE extends Entity {
     super()
     this.addComponent(
       new MoveC(),
-      new BoxCollisionC()
+      new BoxCollisionC(10, 10)
     )
   }
 }
@@ -128,8 +84,48 @@ class BulletE extends Entity {
     super()
     this.addComponent(
       new MoveC(),
-      new BoxCollisionC()
+      new BoxCollisionC(10, 10)
     )
+  }
+}
+
+
+// SYSTEMS
+class InputS extends System {
+  name = 'Input'
+
+  update(eList: Entity[], scMap: Map<string, SingletonComponent>) {
+    const inputGC = scMap.get('input')
+    // TODO:
+  }
+}
+
+class MoveS extends System {
+  name = 'Move'
+
+  update(eList: Entity[], scMap: Map<string, SingletonComponent>) {
+    for (let e of eList) {
+      let pC = e.getComponent('Position') as PositionC
+      let mC = e.getComponent('Move') as MoveC
+
+      pC.x += mC.speedX
+      pC.y += mC.speedY
+    }
+  }
+}
+
+class CollisionS extends System {
+  name = 'Collision'
+
+  update(eList: Entity[], scMap: Map<string, SingletonComponent>) {
+    for (let e1 of eList) {
+      for (let e2 of eList) {
+        let c1 = e1.getComponent('BoxCollision') as BoxCollisionC
+        let c2 = e2.getComponent('BoxCollision') as BoxCollisionC
+        // TODO:
+
+      }
+    }
   }
 }
 
@@ -138,13 +134,13 @@ class BulletE extends Entity {
 const gameWorld = new World()
 
 gameWorld.addSingletonComponent(
-  new InputC()
+  new InputSC()
 )
 
 gameWorld.addSystem(
   new InputS(),
   new MoveS(),
-  new attackS(),
+  // new attackS(),
 )
 
 gameWorld.addEntity(
