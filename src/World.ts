@@ -48,15 +48,17 @@ export class World {
 
   removeSystem(name: string) {
     this.systemList.splice(
-      this.systemList.findIndex(sys => sys.name === name), 1
+      this.systemList.findIndex(sys => sys.name === name),
+      1
     )
   }
 
   update() {
     for (let sys of this.systemList) {
       sys.update(
-        sys.fliterEntity(this.entitySet),
-        this.singletonComponentMap
+        sys._fliterEntity(this.entitySet),
+        this.singletonComponentMap,
+        this
       )
     }
   }

@@ -35,4 +35,12 @@ export class Entity {
   remove() {
     this.world.removeEntity(this)
   }
+
+  serialize() {
+    // TODO: must be override ?
+  }
+
+  deserialize() {
+
+  }
 }
