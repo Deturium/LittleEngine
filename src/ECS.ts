@@ -1,15 +1,4 @@
-import {
-  Component,
-  SingletonComponent
-} from './Component'
-import {Entity} from './Entity'
-import {System} from './System'
-import {World} from './World'
-
-export {
-  Entity,
-  Component,
-  SingletonComponent,
-  System,
-  World,
-}
+export * from './core/Entity'
+export * from './core/Component'
+export * from './core/System'
+export * from './core/World'

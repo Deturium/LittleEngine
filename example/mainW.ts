@@ -149,3 +149,5 @@ gameWorld.addEntity(
 )
 
 gameWorld.start()
+
+console.log('hello!')

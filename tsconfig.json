@@ -7,7 +7,7 @@
     "sourceMap": false,
     "pretty": true,
     "outDir": "./build",
-    "outFile": "./build/LittleEngine.js"
+    // "outFile": "./build/LittleEngine.js"
   },
   "include": [
     "src/**/*",

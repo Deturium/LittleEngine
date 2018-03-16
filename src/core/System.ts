@@ -1,9 +1,9 @@
 import {
-  World,
-  Entity,
   Component,
   SingletonComponent,
-} from './ECS'
+} from './Component'
+import { World } from './World'
+import { Entity } from './Entity'
 
 export abstract class System {
   name: string

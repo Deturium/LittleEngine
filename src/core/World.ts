@@ -1,22 +1,21 @@
 import {
-  Entity,
-  System,
   SingletonComponent,
-} from './ECS'
+} from './Component'
+import { System } from './System'
+import { Entity } from './Entity'
 
 export class World {
 
   systemList: System[]
   entitySet: Set<Entity>
   singletonComponentMap: Map<string, SingletonComponent>
-
   isStop: boolean
 
   constructor() {
-    this.isStop = true
     this.systemList = []
     this.entitySet = new Set()
     this.singletonComponentMap = new Map()
+    this.isStop = true
   }
 
   addSingletonComponent(...singletonComponents: SingletonComponent[]) {
@@ -41,9 +40,7 @@ export class World {
   }
 
   addSystem(...systems: System[]) {
-    for (let sys of this.systemList) {
-      this.systemList.push(sys)
-    }
+    this.systemList.push(...systems)
   }
 
   removeSystem(name: string) {

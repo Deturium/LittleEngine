@@ -1,14 +1,11 @@
-import {
-  Component,
-  World,
-} from './ECS'
+import { Component } from './Component'
+import { World } from './World'
 
 export class Entity {
   type: string
 
-  world: World
+  world: World // init when Entity push into World
   componentMap: Map<string, Component>
-  // resourceHandle?: any
 
   constructor() {
     this.componentMap = new Map()
