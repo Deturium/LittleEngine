@@ -7,11 +7,11 @@
     "sourceMap": false,
     "pretty": true,
     "outDir": "./build",
-    // "outFile": "./build/LittleEngine.js"
+    // "outFile": "./build/game.js"
   },
   "include": [
-    "src/**/*",
-    "example/**/*"
+    "engine/**/*",
+    "dinosaur/**/*"
   ],
   "exclude": [
     "node_modules"
