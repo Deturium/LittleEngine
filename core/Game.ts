@@ -2,40 +2,52 @@ import {
   World
 } from './ECS'
 
-class Game {
+export class Game {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   world: World
-  fps: number
+  fps: number = 60
+  isPause: boolean = false
 
   private timer: number
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    this.fps = 60
   }
 
   setWorld(world: World) {
+    world.renderContent = this.ctx
     this.world = world
+    return this
   }
 
   setFPS(fps: number) {
     this.fps = fps
+    return this
   }
 
   start() {
     this.timer = Date.now()
-    const loopFunc = this._loop.bind(this)
-    loopFunc(loopFunc)
+    this._loop()
   }
 
-  _loop(loopFunc: FrameRequestCallback) {
+  pause() {
+    this.isPause = true
+  }
+
+  resume() {
+    this.isPause = false
+  }
+
+  _loop() {
     const now = Date.now()
-    if (now - this.timer >= 1000 / this.fps) {
+
+    if (!this.isPause && now - this.timer >= 1000 / this.fps) {
+      this.timer = now
       this.world.update()
     }
 
-    requestAnimationFrame(loopFunc)
+    window.requestAnimationFrame(this._loop.bind(this))
   }
 }

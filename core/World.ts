@@ -9,13 +9,12 @@ export class World {
   systemList: System[]
   entitySet: Set<Entity>
   singletonComponentMap: Map<string, SingletonComponent>
-  isStop: boolean
+  renderContent: CanvasRenderingContext2D
 
   constructor() {
     this.systemList = []
     this.entitySet = new Set()
     this.singletonComponentMap = new Map()
-    this.isStop = true
   }
 
   addSingletonComponent(...singletonComponents: SingletonComponent[]) {
@@ -44,27 +43,18 @@ export class World {
   }
 
   removeSystem(name: string) {
-    this.systemList.splice(
-      this.systemList.findIndex(sys => sys.name === name),
-      1
-    )
+    this.systemList.splice(this.systemList.findIndex(sys => sys.name === name), 1)
   }
 
   update() {
     for (let sys of this.systemList) {
-      sys.update(
-        sys._fliterEntity(this.entitySet),
-        this.singletonComponentMap,
-        this
-      )
+      if (sys.isPause)
+        return
+      sys.update(this.entitySet, this.singletonComponentMap, this)
     }
   }
 
-  start() {
-    this.isStop = false
-  }
-
-  stop() {
-    this.isStop = true
+  getRenderContent() {
+    return this.renderContent
   }
 }

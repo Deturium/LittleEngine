@@ -1,10 +1,10 @@
 
 export interface Component {
-  name: string
+  readonly name: string
   [propName: string]: any
 }
 
 export interface SingletonComponent {
-  name: string
+  readonly name: string
   [propName: string]: any
 }

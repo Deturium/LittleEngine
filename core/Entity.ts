@@ -34,10 +34,8 @@ export class Entity {
   }
 
   serialize() {
-    // TODO: must be override ?
   }
 
   deserialize() {
-
   }
 }

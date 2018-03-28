@@ -10,7 +10,6 @@
     // "outFile": "./build/game.js"
   },
   "include": [
-    "engine/**/*",
     "dinosaur/**/*"
   ],
   "exclude": [
