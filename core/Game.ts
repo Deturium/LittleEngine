@@ -38,12 +38,16 @@ export class Game {
 
   resume() {
     this.isPause = false
+    this._loop()
   }
 
   _loop() {
     const now = Date.now()
 
-    if (!this.isPause && now - this.timer >= 1000 / this.fps) {
+    if (this.isPause)
+      return
+
+    if (now - this.timer >= 1000 / this.fps) {
       this.timer = now
       this.world.update()
     }

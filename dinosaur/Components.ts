@@ -16,13 +16,13 @@ export class PositionC implements Component {
 export class VelocityC implements Component {
   name = "Velocity"
 
-  speedX: number
-  speedY: number
+  x: number
+  y: number
   isPin: boolean
 
-  constructor(speedX = 0, speedY = 0) {
-    this.speedX = speedX
-    this.speedY = speedY
+  constructor(x = 0, y = 0) {
+    this.x = x
+    this.y = y
     this.isPin = false
   }
 }

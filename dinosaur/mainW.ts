@@ -2,8 +2,6 @@ import {
   World,
   Entity,
   System,
-  Component,
-  SingletonComponent,
   Game,
 } from '../core/ECS'
 
@@ -20,7 +18,6 @@ import {
   MovementS,
   RenderS,
 } from './Systems'
-import { RenderC } from './Components';
 
 
 // gameboard

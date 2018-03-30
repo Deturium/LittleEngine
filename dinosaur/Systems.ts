@@ -19,11 +19,11 @@ export class MovementS extends System {
     const eList = this.filterByComponent(eSet, 'Position', 'Velocity')
 
     for (let e of eSet) {
-      let pC = e.getComponent('Position') as PositionC
-      let vC = e.getComponent('Velocity') as VelocityC
+      let p = e.getComponent('Position') as PositionC
+      let v = e.getComponent('Velocity') as VelocityC
 
-      pC.x += vC.speedX
-      pC.y += vC.speedY
+      p.x += v.x
+      p.y += v.y
     }
   }
 }

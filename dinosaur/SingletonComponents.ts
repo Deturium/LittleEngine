@@ -30,3 +30,9 @@ export class InputSC implements SingletonComponent {
     })
   }
 }
+
+export class ImagesSC implements SingletonComponent {
+  name = "Images"
+
+  // TODO:
+}
