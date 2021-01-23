@@ -1,42 +1,17 @@
-import {
-  Component,
-  SingletonComponent,
-} from './Component'
 import { World } from './World'
 import { Entity } from './Entity'
 
 export abstract class System {
+
+  world: World
+
   name: string
   isPause: boolean = false
 
+  protected entities: Entity[]
+
   constructor() {
   }
-
-  filterByFunc(entitySet: Set<Entity>, filterFunc: (entity: Entity) => boolean): Entity[] {
-    const retEntityList: Entity[] = []
-    for (let entity of entitySet) {
-      if (filterFunc(entity))
-        retEntityList.push(entity)
-    }
-    return retEntityList
-  }
-
-  filterByComponent(entitySet: Set<Entity>, ...componentNames: string[]): Entity[] {
-    return this.filterByFunc(
-      entitySet,
-      entity => componentNames.every(name => entity.hasComponent(name))
-    )
-  }
-
-  filterByType(entitySet: Set<Entity>, type: string): Entity[] {
-    return this.filterByFunc(entitySet, entity => entity.type === type)
-  }
-
-  abstract update(
-    entitySet: Set<Entity>,
-    singletonComponentMap: Map<string, SingletonComponent>,
-    world: World
-  ): void
 
   pause() {
     this.isPause = true
@@ -45,4 +20,14 @@ export abstract class System {
   resume() {
     this.isPause = false
   }
+
+  setQueryEntities(allEntities: Entity[]) {
+    this.entities = allEntities.filter(e => this.queryEntity(e))
+  }
+
+  abstract init(world: World): void
+
+  abstract queryEntity(entity: Entity): boolean
+
+  abstract update(delta: number): void
 }

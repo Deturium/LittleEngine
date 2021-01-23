@@ -1,8 +1,7 @@
-import { SingletonComponent } from '../core/ECS'
+import { Component } from '@/ECS'
 
 
-export class InputSC implements SingletonComponent {
-  name = "Input"
+export class InputSC implements Component {
 
   keys: Set<String>
   mouse: {
@@ -18,21 +17,17 @@ export class InputSC implements SingletonComponent {
       y: 0
     }
 
-    this._init(canvas)
+    this._bindListener(canvas)
   }
 
-  _init(canvas: HTMLCanvasElement) {
+  _bindListener(canvas: HTMLCanvasElement) {
     canvas.addEventListener('click', (e) => {
       this.mouse.x = e.offsetX
       this.mouse.y = e.offsetY
 
       this.isChange = true
     })
+
+    // TODO: 键盘事件
   }
-}
-
-export class ImagesSC implements SingletonComponent {
-  name = "Images"
-
-  // TODO:
 }

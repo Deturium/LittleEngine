@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "module": "amd",
-    "target": "es6",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "pretty": true,
     "outDir": "./build",
-    // "outFile": "./build/game.js"
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./core/*"],
+    }
   },
-  "include": [
-    "dinosaur/**/*"
-  ],
   "exclude": [
     "node_modules"
   ]
