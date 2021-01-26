@@ -1,6 +1,7 @@
 import { World, Entity } from '@/ECS'
 
 import { Render2D } from './systems/Render2D'
+import { Render3D } from './systems/Render3D'
 import { Physics } from './systems/Physics'
 import { Geometry } from './components/Geometry'
 import { Transform } from './components/Transform'
@@ -13,8 +14,9 @@ const world = new World(canvas)
 
 
 world
-  .addSystem(new Render2D())
+  // .addSystem(new Render2D())
   .addSystem(new Physics())
+  .addSystem(new Render3D())
 
 
 world
@@ -72,8 +74,4 @@ world
   )
 
 
-world.start()
-
-setTimeout(() => {
-  world.pause()
-}, 4000)
+world.render()

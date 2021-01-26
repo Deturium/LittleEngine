@@ -7,7 +7,7 @@ import { Entity } from './Entity'
 export class World extends ComponentManager {
 
   fps: number = 60
-  isPause: boolean = false
+  isPause: boolean = true
   private timer: number
   renderTarget: HTMLCanvasElement
 
@@ -44,7 +44,7 @@ export class World extends ComponentManager {
   }
 
   removeSystem(system: System) {
-    const idx = this.systemList.findIndex(sys => sys.name === system.name)
+    const idx = this.systemList.findIndex(sys => sys.constructor.name === system.constructor.name)
     this.systemList.splice(idx, 1)
     return this
   }
@@ -65,6 +65,7 @@ export class World extends ComponentManager {
   }
 
   start() {
+    this.isPause = false
     this.timer = Date.now()
     this._loop()
   }
@@ -73,17 +74,29 @@ export class World extends ComponentManager {
     this.isPause = true
   }
 
-  resume() {
-    this.isPause = false
-    this._loop()
+  /** 渲染一帧 */
+  render(currentTime?: number) {
+    if (!this.isPause) {
+      return
+    }
+
+    let delta = 0
+
+    if (currentTime) {
+      delta = currentTime - this.timer
+      this.timer = currentTime
+    }
+
+    this._systemUpdate(delta)
   }
 
+
   private _loop() {
-    const now = Date.now()
-
-    if (this.isPause)
+    if (this.isPause) {
       return
+    }
 
+    const now = Date.now()
     const delta = now - this.timer
 
     if (delta >= 1000 / this.fps) {

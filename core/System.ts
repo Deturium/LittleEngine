@@ -4,8 +4,6 @@ import { Entity } from './Entity'
 export abstract class System {
 
   world: World
-
-  name: string
   isPause: boolean = false
 
   protected entities: Entity[]

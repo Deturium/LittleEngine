@@ -1,9 +1,8 @@
-import { System, Entity, World } from '@/ECS'
+import { System, Entity } from '@/ECS'
 import { Transform } from '../components/Transform'
 import { Velocity } from '../components/Velocity'
 
 export class Physics extends System {
-  name: 'physics'
 
   constructor() {
     super()
