@@ -1,13 +1,13 @@
 import { System, Entity, World } from '@/ECS'
-import { Geometry, ShapeEnum } from '../../components/Geometry'
-import { Transform } from '../../components/Transform'
-import { vec3, vec2 } from 'gl-matrix'
+// import { Geometry, ShapeEnum } from '../../components/Geometry'
+// import { Transform } from '../../components/Transform'
+// import { vec3, vec2 } from 'gl-matrix'
 
 import REGL from 'regl'
 
 export const glsl = (x: any) => x;
 
-export class Render3D extends System {
+export class RenderLight extends System {
 
   width = 700
   height = 700
@@ -27,12 +27,13 @@ export class Render3D extends System {
   }
 
   queryEntity(entity: Entity) {
-    return entity.hasComponent(Geometry)
+    // return entity.hasComponent(Geometry)
+    return false
   }
 
-  update(_: number) {
+  getLightRender(scene: string) {
 
-    this.regl({
+    return this.regl({
       vert: glsl`
         precision mediump float;
         attribute vec2 position;
@@ -52,27 +53,8 @@ export class Render3D extends System {
           float distance = length(coord - center);
           return distance - r;
         }
-
-        vec2 scene(vec2 coord) {
-          float r1 = circleSDF(coord, u_resolution * vec2(0.3, 0.3), 60.);
-          float r2 = circleSDF(coord, u_resolution * vec2(0.3, 0.7), 40.);
-          float r3 = circleSDF(coord, u_resolution * vec2(0.7, 0.5), 50.);
-
-          float d = min(min(r1, r2), r3);
-          float m = 1.;
-
-          if (d == r1) {
-            m = 0.9;
-          }
-          if (d == r2) {
-            m = 1.8;
-          }
-          if (d == r3) {
-            m = 0.;
-          }
-
-          return vec2(d, m);
-        }
+        
+      ` + scene + glsl`
 
         float rayMarch(vec2 xy, vec2 st) {
           float t = 0.;
@@ -80,11 +62,11 @@ export class Render3D extends System {
             if (t > u_resolution.x && t > u_resolution.y) {
               break;
             }
-            vec2 dm = scene(xy + st * t);
-            if (dm.x < EPSILON) {
-              return dm.y;
+            vec2 marchRes = scene(xy + st * t);
+            if (marchRes.x < EPSILON) {
+              return marchRes.y;
             }
-            t += dm.x;
+            t += marchRes.x;
           }
           return 0.;
         }
@@ -101,7 +83,6 @@ export class Render3D extends System {
 
           for (int i = 0; i < SAMPLE_COUNT; i++) {
 
-            // 抖动采样
             float r = 2. * 3.14159 * (
               float(i) + random(vec2(gl_FragCoord.x + float(i), gl_FragCoord.y + float(i))) 
             ) / float(SAMPLE_COUNT);
@@ -131,6 +112,31 @@ export class Render3D extends System {
       },
       count: 4,
       primitive: 'triangle fan',
-    })()
+    })
+  }
+
+  update(_: number) {
+    this.getLightRender(glsl`
+      vec2 scene(vec2 coord) {
+        float r1 = circleSDF(coord, u_resolution * vec2(0.3, 0.3), 60.);
+        float r2 = circleSDF(coord, u_resolution * vec2(0.3, 0.7), 40.);
+        float r3 = circleSDF(coord, u_resolution * vec2(0.7, 0.5), 50.);
+
+        float stepL = min(min(r1, r2), r3);
+        float lCor = 1.;
+
+        if (stepL == r1) {
+          lCor = 0.9;
+        }
+        if (stepL == r2) {
+          lCor = 1.8;
+        }
+        if (stepL == r3) {
+          lCor = 0.;
+        }
+
+        return vec2(stepL, lCor);
+      }
+    `)()
   }
 }

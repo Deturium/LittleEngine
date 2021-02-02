@@ -1,6 +1,8 @@
 import { ComponentManager } from './Component'
 // import { World } from './World'
 
+let uid = 0
+
 export class Entity extends ComponentManager {
   uid: number
 
@@ -8,6 +10,9 @@ export class Entity extends ComponentManager {
 
   constructor() {
     super()
+
+    this.uid = uid++
+
     return this
   }
 

@@ -1,8 +1,8 @@
 import { System, Entity } from '@/ECS'
-import { Transform } from '../components/Transform'
-import { Velocity } from '../components/Velocity'
+import { Transform } from '../../components/Transform'
+import { Velocity } from '../../components/Velocity'
 
-export class Physics extends System {
+export class Kinematics extends System {
 
   constructor() {
     super()
