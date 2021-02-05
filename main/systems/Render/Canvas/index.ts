@@ -1,14 +1,11 @@
 import { System, Entity, World } from '@/ECS'
-import { Geometry, ShapeEnum, ShapeGeometry } from '../../components/Geometry'
-import { Transform } from '../../components/Transform'
+import { Geometry, ShapeEnum, ShapeGeometry } from '../../../components/Geometry'
+import { Transform } from '../../../components/Transform'
 import { vec3, vec2 } from 'gl-matrix'
 
-import { StateSC } from '../../singletonComponents/State'
+import { StateSC } from '../../../singletonComponents/State'
 
-export class Render2D extends System {
-
-  width = 1000
-  height = 600
+export class RenderCanvans extends System {
 
   ctx: CanvasRenderingContext2D
 
@@ -17,9 +14,7 @@ export class Render2D extends System {
   }
 
   init(world: World) {
-    const canvas = world.renderTarget
-    canvas.width = this.width
-    canvas.height = this.height
+    const canvas = world.canvas
 
     this.ctx = canvas.getContext('2d')
   }
@@ -30,6 +25,9 @@ export class Render2D extends System {
 
   update(_: number) {
     const ctx = this.ctx
+    const { width, height } = this.world
+    ctx.clearRect(0, 0, width, height)
+
 
     const stateSC = this.world.getComponent(StateSC)
     // if (!stateSC.renderDirty) {
@@ -39,7 +37,6 @@ export class Render2D extends System {
 
     const pickingEntity = stateSC.pickingEntities[stateSC.pickingEntities.length - 1]
 
-    ctx.clearRect(0, 0, this.width, this.height)
     this.entities.forEach(e => {
       const geometryC = e.getComponent(Geometry)
 
@@ -47,8 +44,11 @@ export class Render2D extends System {
         const { position } = geometryC;
         const { r } = geometryC.getGeometry<ShapeGeometry.Circle>();
 
+        ctx.fillStyle = '#66ccff'
+
         ctx.beginPath()
         ctx.arc(position[0], position[1], r, 0, 2 * Math.PI)
+
         if (pickingEntity?.uid === e.uid) {
           ctx.fill()
         } else {

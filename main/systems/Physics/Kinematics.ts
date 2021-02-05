@@ -1,29 +1,28 @@
 import { System, Entity } from '@/ECS'
-import { Transform } from '../../components/Transform'
+import { Geometry } from '../../components/Geometry'
 import { Velocity } from '../../components/Velocity'
 
 export class Kinematics extends System {
-
   constructor() {
     super()
   }
 
-  init() {
-
-  }
+  init() { }
 
   queryEntity(entity: Entity) {
-    return entity.hasComponent(Velocity) && entity.hasComponent(Transform)
+    return entity.hasComponent(Velocity) && entity.hasComponent(Geometry)
   }
 
-  update(_: number) {
+  update(delta: number) {
+    const deltaTime = delta / 60
 
     this.entities.forEach(e => {
       const velocity = e.getComponent(Velocity)
 
       if (!velocity.isPin) {
-        const transform = e.getComponent(Transform)
-        transform.translate(velocity.vx, velocity.vy)
+        const geo = e.getComponent(Geometry)
+        geo.position[0] += velocity.vx * deltaTime
+        geo.position[1] += velocity.vy * deltaTime
       }
     })
   }

@@ -9,9 +9,6 @@ export const glsl = (x: any) => x;
 
 export class RenderLight extends System {
 
-  width = 700
-  height = 700
-
   regl: REGL.Regl
 
   constructor() {
@@ -19,9 +16,7 @@ export class RenderLight extends System {
   }
 
   init(world: World) {
-    const canvas = world.renderTarget
-    canvas.width = this.width
-    canvas.height = this.height
+    const canvas = world.canvas
 
     this.regl = REGL(canvas)
   }
@@ -32,6 +27,8 @@ export class RenderLight extends System {
   }
 
   getLightRender(scene: string) {
+
+    const { width, height } = this.world
 
     return this.regl({
       vert: glsl`
@@ -107,7 +104,7 @@ export class RenderLight extends System {
         ]
       },
       uniforms: {
-        u_resolution: [this.width, this.height],
+        u_resolution: [width, height],
         u_color: [1, 1, 1],
       },
       count: 4,
